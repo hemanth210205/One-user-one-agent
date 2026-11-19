@@ -1,0 +1,15 @@
+﻿# Render Blueprint: New > Blueprint, point it at this repo. See README.md, "Deploying to Render".
+services:
+  - type: web
+    name: one-user-one-agent
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn web.app:app --host 0.0.0.0 --port $PORT --proxy-headers --forwarded-allow-ips="*"
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.7
+      - key: LIVE_ACCESS_CODE
+        sync: false          # set it in the Render dashboard; never commit it
